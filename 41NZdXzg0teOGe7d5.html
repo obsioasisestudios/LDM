@@ -1,0 +1,1273 @@
+<html><head><base href=".">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sistema de Contabilidad - Lechoner&#xed;a</title>
+
+  <style>
+    :root {
+      --primary: #ff9999; 
+      --secondary: #ff7070; 
+      --dark: #4a3636; 
+      --light: #fff5f5; 
+      --success: #7ac380;
+      --warning: #ffd07d;
+      --danger: #ff8080;
+      --overlay: rgba(74, 54, 54, 0.75);
+      --gradient: linear-gradient(135deg, #ff9999, #ff7070);
+    }
+
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .header {
+      background: var(--gradient);
+      padding: 3rem 2rem;
+      margin: 1rem auto 3rem;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      max-width: 1100px;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c13.807 0 25 11.193 25 25S43.807 55 30 55 5 43.807 5 30 16.193 5 30 5zm0 2c12.703 0 23 10.297 23 23S42.703 53 30 53 7 42.703 7 30 17.297 7 30 7zm-4 27c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm8 0c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='rgba(255,255,255,0.15)' fill-rule='evenodd'/%3E%3C/svg%3E");
+      opacity: 0.3;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+    }
+
+    .sections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .sections {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+      }
+    }
+
+    .section {
+      background: var(--light);
+      padding: 2.5rem;
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(255, 153, 153, 0.1);
+      transition: all 0.3s ease;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        margin: 0.5rem 0;
+        padding: 1.5rem;
+      }
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: var(--gradient);
+      border-radius: 4px 4px 0 0;
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255, 153, 153, 0.2);
+    }
+
+    @media (hover: none) {
+      .section:hover {
+        transform: none;
+      }
+    }
+
+    .section h2 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 768px) {
+      .section h2 {
+        font-size: 1.4rem;
+      }
+    }
+
+    .section h2::before {
+      content: '🐷';
+      margin-right: 10px;
+      font-size: 1.2em;
+    }
+
+    .section h2::after {
+      display: none;
+    }
+
+    .section-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .section.expanded .section-content {
+      max-height: 2000px;
+      transition: max-height 0.6s ease-in;
+    }
+
+    .section-content::after {
+      content: '';
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      height: 100px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 90c22.091 0 40-17.909 40-40S72.091 10 50 10 10 27.909 10 50s17.909 40 40 40zm0-5c-19.33 0-35-15.67-35-35s15.67-35 35-35 35 15.67 35 35-15.67 35-35 35zm-8-20c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6zm16 0c3.314 0 6-2.686 6-6s-2.686-6-6-6-6 2.686-6 6 2.686 6 6 6z' fill='%23ffe6e6'/%3E%3C/svg%3E");
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .form-group {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .form-group {
+        margin-bottom: 1rem;
+      }
+    }
+
+    label {
+      color: var(--dark);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.7rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #ffe6e6;
+      border-radius: 15px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    @media (max-width: 768px) {
+      input, select {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 153, 153, 0.2);
+    }
+
+    button {
+      background: var(--gradient);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(255, 153, 153, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      button {
+        padding: 0.8rem 1.5rem;
+        width: 100%;
+      }
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #ff7070, #ff5555);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(255, 153, 153, 0.3);
+    }
+
+    @media (hover: none) {
+      button:hover {
+        transform: none;
+      }
+    }
+
+    .inventory-table {
+      width: 100%;
+      background: white;
+      margin: 1rem 0;
+      border-collapse: collapse;
+    }
+
+    .inventory-table th {
+      background: var(--gradient);
+      color: white;
+      padding: 1.2rem;
+      font-weight: 600;
+      text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .inventory-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #ffe6e6;
+      vertical-align: middle;
+      transition: all 0.2s ease;
+    }
+
+    .inventory-table tr {
+      transition: all 0.2s ease;
+    }
+
+    .inventory-table tr:hover {
+      background: #fff0f0;
+      transform: scale(1.01);
+    }
+
+    .inventory-filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .inventory-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      border-bottom: 3px solid var(--primary);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .pagination button {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: white;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .pagination button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-buttons {
+      background: #f8f9fa;
+      padding: 0.5rem;
+      border-radius: 10px;
+      gap: 0.5rem;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .tab-buttons {
+        flex-direction: column;
+      }
+    }
+
+    .tab-button {
+      background: transparent;
+      color: var(--dark);
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .tab-button {
+        width: 100%;
+      }
+    }
+
+    .tab-button.active {
+      background: var(--secondary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .order-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .order-item {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 15px;
+      border-left: 5px solid var(--primary);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+
+    .order-item:hover {
+      border-left-color: var(--secondary);
+      background: #fff5f5;
+    }
+
+    @media (hover: none) {
+      .order-item:hover {
+        transform: none;
+      }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--overlay);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+      display: flex;
+      opacity: 1;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 3rem;
+      border-radius: 20px;
+      max-width: 500px;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .modal-content {
+        width: 90%;
+        max-width: none;
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--dark);
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+
+    .notification {
+      background: var(--secondary);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.3s ease forwards;
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .notification {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        width: auto;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .comprobante-preview {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .comprobante-preview:hover {
+      transform: scale(1.1);
+    }
+
+    .comprobante-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1100;
+    }
+
+    .comprobante-modal img {
+      max-width: 90%;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+
+    .update-payment-btn {
+      background: var(--warning);
+      color: var(--dark);
+      padding: 0.3rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .update-payment-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .secondary-button {
+      background: #ddd;
+      color: var(--dark);
+    }
+
+    .primary-button {
+      background: var(--primary);
+      color: white;
+    }
+
+    .status-badge {
+      padding: 0.3rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+    }
+
+    .status-badge.pagado {
+      background: var(--success);
+      color: white;
+    }
+
+    .status-badge.pendiente {
+      background: var(--warning);
+      color: var(--dark);
+    }
+
+    #comprobanteCarousel {
+      position: relative;
+    }
+
+    .carousel-images {
+      display: flex;
+      overflow: hidden;
+    }
+
+    .carousel-images img {
+      width: 100%;
+      height: auto;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+
+    .carousel-nav button {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 15px;
+      cursor: pointer;
+    }
+
+    .modal-close-carousel {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close-carousel:hover {
+      background: rgba(0,0,0,0.8);
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>Sistema de Contabilidad - Lechoner&#xed;a</h1>
+  </header>
+
+  <div class="sections">
+    <section class="section expanded" id="ingreso-cerdos" style="opacity: 1; transform: translateY(0);">
+      <h2>Ingreso de Cerdos</h2>
+      <div class="section-content">
+        <form id="pig-form">
+          <div class="form-group">
+            <label for="proveedor">Nombre del Proveedor</label>
+            <input type="text" id="proveedor" required>
+          </div>
+          <div class="form-group">
+            <label for="arrobas">Peso en Arrobas</label>
+            <input type="number" id="arrobas" step="0.1" required>
+          </div>
+          <div class="form-group">
+            <label for="precio">Precio</label>
+            <input type="number" id="precio" required>
+          </div>
+          <div class="form-group">
+            <label for="pago">Estado de Pago</label>
+            <select id="pago" required>
+              <option value="pagado">Pagado</option>
+              <option value="pendiente">Pendiente</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="comprobante">Comprobante (Foto)</label>
+            <input type="file" id="comprobante" accept="image/*">
+          </div>
+          <button type="submit">Registrar Cerdo</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="inventario" style="opacity: 0; transform: translateY(20px);">
+      <h2>Inventario de Cerdos</h2>
+      <div class="section-content">
+        <div class="inventory-filters">
+          <div class="form-group">
+            <label for="filter-proveedor">Filtrar por Proveedor</label>
+            <input type="text" id="filter-proveedor">
+          </div>
+          <div class="form-group">
+            <label for="filter-status">Estado de Pago</label>
+            <select id="filter-status">
+              <option value>Todos</option>
+              <option value="pagado">Pagado</option>
+              <option value="pendiente">Pendiente</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sort-by">Ordenar por</label>
+            <select id="sort-by">
+              <option value="fecha">Fecha</option>
+              <option value="arrobas">Arrobas</option>
+              <option value="precio">Precio</option>
+            </select>
+          </div>
+        </div>
+        <div class="inventory-stats">
+          <div class="stat-card">
+            <div class="stat-value" id="total-cerdos">0</div>
+            <div class="stat-label">Total Cerdos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="total-arrobas">0</div>
+            <div class="stat-label">Total Arrobas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="total-inversion">&#x24;0</div>
+            <div class="stat-label">Inversi&#xf3;n Total</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="fecha-registro">-</div>
+            <div class="stat-label">Fecha Registro</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="ultima-modificacion">-</div>
+            <div class="stat-label">&#xda;ltima Modificaci&#xf3;n</div>
+          </div>
+        </div>
+        <table class="inventory-table">
+          <thead>
+            <tr>
+              <th>Proveedor</th>
+              <th>Peso (Arrobas)</th>
+              <th>Precio</th>
+              <th>Estado de Pago</th>
+              <th>Comprobante</th>
+              <th>Fecha Registro</th>
+              <th>&#xda;ltima Modificaci&#xf3;n</th>
+            </tr>
+          </thead>
+          <tbody id="inventory-body">
+            <!-- El contenido se llenará dinámicamente -->
+          </tbody>
+        </table>
+        <div class="pagination">
+          <!-- Paginación se implementará aquí -->
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ventas" style="opacity: 0; transform: translateY(20px);">
+      <h2>Gesti&#xf3;n de Ventas</h2>
+      <div class="section-content">
+        <div class="tab-buttons">
+          <button class="tab-button active" data-tab="crear-encargo">Crear Encargo</button>
+          <button class="tab-button" data-tab="encargos-pendientes">Encargos Pendientes</button>
+        </div>
+
+        <div id="crear-encargo" class="tab-content">
+          <form id="order-form">
+            <div class="form-group">
+              <label for="cliente">Nombre del Cliente</label>
+              <input type="text" id="cliente" required>
+            </div>
+            <div class="form-group">
+              <label for="arrobas-lechona">Arrobas de Lechona</label>
+              <input type="number" id="arrobas-lechona" step="0.1" required>
+            </div>
+            <div class="form-group">
+              <label for="fecha-entrega">Fecha de Entrega</label>
+              <input type="date" id="fecha-entrega" required>
+            </div>
+            <div class="form-group">
+              <label for="hora-entrega">Hora de Entrega</label>
+              <input type="time" id="hora-entrega" required>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Tel&#xe9;fono</label>
+              <input type="tel" id="telefono" required>
+            </div>
+            <div class="form-group">
+              <label for="abono">Abono</label>
+              <input type="number" id="abono" required>
+            </div>
+            <button type="submit">Crear Encargo</button>
+          </form>
+        </div>
+
+        <div id="encargos-pendientes" class="tab-content" style="display: none;">
+          <ul class="order-list" id="pending-orders">
+            <!-- El contenido se llenará dinámicamente -->
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal de Confirmación -->
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close">&#xd7;</button>
+      <h2>Confirmar Acci&#xf3;n</h2>
+      <p id="confirmMessage"></p>
+      <div style="margin-top: 1rem; text-align: right;">
+        <button id="confirmCancel" style="background: #ddd;">Cancelar</button>
+        <button id="confirmAccept" style="margin-left: 1rem;">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Éxito -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close">&#xd7;</button>
+      <h2>&#xa1;&#xc9;xito!</h2>
+      <p id="successMessage"></p>
+      <button onclick="closeModal('successModal')" style="margin-top: 1rem;">Aceptar</button>
+    </div>
+  </div>
+
+  <!-- Comprobante Modal -->
+  <div id="comprobanteModal" class="comprobante-modal">
+    <img id="comprobanteModalImage" src alt="Comprobante">
+  </div>
+
+  <!-- Notificación -->
+  <div id="notification" class="notification"></div>
+
+  <!-- Modal de Pago -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close">&#xd7;</button>
+      <div id="paymentModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Comprobante Carousel Modal -->
+  <div id="comprobanteCarouselModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <button class="modal-close-carousel">&#xd7;</button>
+      <div id="comprobanteCarousel">
+        <div class="carousel-images"></div>
+        <div class="carousel-nav">
+          <button class="prev">&#x276e;</button>
+          <button class="next">&#x276f;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>let inventory = [];
+let orders = [];
+let currentPage = 1;
+const itemsPerPage = 10;
+let filteredInventory = [];
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP'
+  }).format(amount);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    document.body.classList.add('mobile');
+  }
+  const sections = document.querySelectorAll('.section');
+  sections.forEach((section, index) => {
+    if (index > 0) {
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(20px)';
+    } else {
+      section.classList.add('expanded');
+    }
+    setTimeout(() => {
+      if (index > 0) {
+        section.style.opacity = '1';
+        section.style.transform = 'translateY(0)';
+      }
+    }, 100 * index);
+  });
+  document.querySelectorAll('.section h2').forEach(header => {
+    header.addEventListener('click', () => {
+      const section = header.parentElement;
+      toggleSection(section);
+    });
+  });
+});
+document.querySelectorAll('button').forEach(button => {
+  button.addEventListener('click', function () {
+    if (!this.classList.contains('modal-close')) {
+      const originalText = this.innerHTML;
+      this.innerHTML = '<span class="loading">Processing...</span>';
+      setTimeout(() => {
+        this.innerHTML = originalText;
+      }, 1000);
+    }
+  });
+});
+const forms = document.querySelectorAll('form');
+forms.forEach(form => {
+  form.addEventListener('submit', function (e) {
+    const inputs = this.querySelectorAll('input, select');
+    inputs.forEach(input => {
+      input.style.transition = 'all 0.3s ease';
+      if (input.value) {
+        input.style.borderColor = '#48bb78';
+      }
+    });
+  });
+});
+function toggleSection(section) {
+  section.classList.toggle('expanded');
+}
+document.getElementById('pig-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  showModal('confirmModal', '¿Desea registrar este cerdo en el inventario?');
+  const formData = {
+    proveedor: document.getElementById('proveedor').value,
+    arrobas: parseFloat(document.getElementById('arrobas').value),
+    precio: parseFloat(document.getElementById('precio').value),
+    pago: document.getElementById('pago').value,
+    comprobante: document.getElementById('comprobante').files[0],
+    fechaRegistro: new Date().toISOString(),
+    ultimaModificacion: new Date().toISOString()
+  };
+  document.getElementById('confirmAccept').onclick = () => {
+    inventory.push(formData);
+    updateInventoryTable();
+    this.reset();
+    closeModal('confirmModal');
+    showNotification('Cerdo registrado exitosamente');
+  };
+  document.getElementById('confirmCancel').onclick = () => {
+    closeModal('confirmModal');
+  };
+});
+function updateInventoryTable() {
+  if (!inventory) {
+    inventory = [];
+  }
+  const proveedorFilter = document.getElementById('filter-proveedor')?.value?.toLowerCase() || '';
+  const statusFilter = document.getElementById('filter-status')?.value || '';
+  const sortBy = document.getElementById('sort-by')?.value || 'fecha';
+  filteredInventory = inventory.filter(pig => {
+    return pig.proveedor.toLowerCase().includes(proveedorFilter) && (statusFilter === '' || pig.pago === statusFilter);
+  });
+  filteredInventory.sort((a, b) => {
+    if (sortBy === 'fecha') return new Date(b.fecha) - new Date(a.fecha);
+    if (sortBy === 'arrobas') return b.arrobas - a.arrobas;
+    if (sortBy === 'precio') return b.precio - a.precio;
+    return 0;
+  });
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginatedInventory = filteredInventory.slice(start, end);
+  const tbody = document.getElementById('inventory-body');
+  if (!tbody) {
+    console.error('Could not find inventory-body element');
+    return;
+  }
+  tbody.innerHTML = '';
+  if (paginatedInventory.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 2rem;">
+          No se encontraron resultados
+        </td>
+      </tr>
+    `;
+    return;
+  }
+  paginatedInventory.forEach((pig, index) => {
+    const row = document.createElement('tr');
+    let comprobanteHtml = '-';
+    if (pig.comprobante || pig.comprobantes && pig.comprobantes.length > 0) {
+      const previewImage = pig.comprobante || pig.comprobantes[0];
+      const totalImages = (pig.comprobantes ? pig.comprobantes.length : 0) + (pig.comprobante ? 1 : 0);
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const previewImg = row.querySelector('.comprobante-preview');
+        if (previewImg) {
+          previewImg.src = e.target.result;
+        }
+      };
+      reader.readAsDataURL(previewImage);
+      comprobanteHtml = `
+        <div style="position: relative;">
+          <img class="comprobante-preview" src="" alt="Comprobante" onclick="viewComprobante(${index + (currentPage - 1) * itemsPerPage})">
+          ${totalImages > 1 ? `<span style="position: absolute; bottom: 5px; right: 5px; background: rgba(0,0,0,0.7); color: white; padding: 2px 6px; border-radius: 10px; font-size: 12px;">+${totalImages - 1}</span>` : ''}
+        </div>
+      `;
+    }
+    const actionButton = pig.pago === 'pendiente' ? `<button onclick="updatePaymentStatus(${index + (currentPage - 1) * itemsPerPage})" class="update-payment-btn">Actualizar Pago</button>` : '';
+    row.innerHTML = `
+      <td>${pig.proveedor}</td>
+      <td>${pig.arrobas} @</td>
+      <td>${formatCurrency(pig.precio)}</td>
+      <td>
+        <span class="status-badge ${pig.pago}">
+          ${pig.pago}
+        </span>
+        ${actionButton}
+      </td>
+      <td>${comprobanteHtml}</td>
+      <td>${new Date(pig.fechaRegistro).toLocaleString()}</td>
+      <td>${new Date(pig.ultimaModificacion).toLocaleString()}</td>
+    `;
+    tbody.appendChild(row);
+  });
+  updatePagination();
+  updateStats();
+  const tableWrapper = document.createElement('div');
+  tableWrapper.style.overflowX = 'auto';
+  const table = tbody.closest('table');
+  table.parentNode.insertBefore(tableWrapper, table);
+  tableWrapper.appendChild(table);
+}
+document.getElementById('order-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  showModal('confirmModal', '¿Desea crear este encargo?');
+  const orderData = {
+    cliente: document.getElementById('cliente').value,
+    arrobas: parseFloat(document.getElementById('arrobas-lechona').value),
+    fecha: document.getElementById('fecha-entrega').value,
+    hora: document.getElementById('hora-entrega').value,
+    telefono: document.getElementById('telefono').value,
+    abono: parseFloat(document.getElementById('abono').value)
+  };
+  document.getElementById('confirmAccept').onclick = () => {
+    orders.push(orderData);
+    updatePendingOrders();
+    this.reset();
+    closeModal('confirmModal');
+    showNotification('Encargo creado exitosamente');
+  };
+  document.getElementById('confirmCancel').onclick = () => {
+    closeModal('confirmModal');
+  };
+});
+function updatePendingOrders() {
+  const ordersList = document.getElementById('pending-orders');
+  ordersList.innerHTML = '';
+  orders.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+  orders.forEach(order => {
+    const li = document.createElement('li');
+    li.className = 'order-item';
+    li.innerHTML = `
+      <strong>Cliente:</strong> ${order.cliente}<br>
+      <strong>Arrobas:</strong> ${order.arrobas}<br>
+      <strong>Entrega:</strong> ${order.fecha} ${order.hora}<br>
+      <strong>Teléfono:</strong> ${order.telefono}<br>
+      <strong>Abono:</strong> ${formatCurrency(order.abono)}
+    `;
+    ordersList.appendChild(li);
+  });
+}
+document.querySelectorAll('.tab-button').forEach(button => {
+  button.addEventListener('click', function () {
+    const tabId = this.dataset.tab;
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+    document.getElementById(tabId).style.display = 'block';
+    this.closest('.section').classList.add('expanded');
+  });
+});
+function showModal(modalId, message) {
+  const modal = document.getElementById(modalId);
+  if (modalId === 'confirmModal') {
+    document.getElementById('confirmMessage').textContent = message;
+  } else if (modalId === 'successModal') {
+    document.getElementById('successMessage').textContent = message;
+  }
+  modal.classList.add('active');
+  modal.style.animation = 'fadeIn 0.3s ease forwards';
+  modal.querySelector('.modal-content').style.animation = 'slideIn 0.3s ease forwards';
+}
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.classList.remove('active');
+}
+function showNotification(message, duration = 3000) {
+  const notification = document.getElementById('notification');
+  notification.textContent = message;
+  notification.classList.add('show');
+  setTimeout(() => {
+    notification.classList.remove('show');
+  }, duration);
+}
+document.querySelectorAll('.modal-close').forEach(button => {
+  button.addEventListener('click', () => {
+    button.closest('.modal').classList.remove('active');
+  });
+});
+const scrollButton = document.createElement('button');
+scrollButton.innerHTML = '↑';
+scrollButton.style.cssText = `
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--secondary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 100;
+`;
+document.body.appendChild(scrollButton);
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('comprobanteModal').addEventListener('click', function (e) {
+    if (e.target === this) {
+      this.style.display = 'none';
+    }
+  });
+});
+window.addEventListener('scroll', () => {
+  scrollButton.style.opacity = window.scrollY > 300 ? '1' : '0';
+});
+scrollButton.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+let xDown = null;
+let yDown = null;
+function handleTouchStart(evt) {
+  xDown = evt.touches[0].clientX;
+  yDown = evt.touches[0].clientY;
+}
+function handleTouchMove(evt) {
+  if (!xDown || !yDown) {
+    return;
+  }
+  let xUp = evt.touches[0].clientX;
+  let yUp = evt.touches[0].clientY;
+  let xDiff = xDown - xUp;
+  let yDiff = yDown - yUp;
+  if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    if (xDiff > 0) {} else {}
+  }
+  xDown = null;
+  yDown = null;
+}
+function updateStats() {
+  document.getElementById('total-cerdos').textContent = inventory.length;
+  const totalArrobas = inventory.reduce((sum, pig) => sum + pig.arrobas, 0);
+  document.getElementById('total-arrobas').textContent = totalArrobas.toFixed(1);
+  const totalInversion = inventory.reduce((sum, pig) => sum + pig.precio, 0);
+  document.getElementById('total-inversion').textContent = formatCurrency(totalInversion);
+  const ultimaModificacion = inventory.reduce((latest, pig) => {
+    const pigDate = new Date(pig.ultimaModificacion);
+    return pigDate > latest ? pigDate : latest;
+  }, new Date(0));
+  document.getElementById('ultima-modificacion').textContent = ultimaModificacion.getTime() === 0 ? '-' : ultimaModificacion.toLocaleString();
+}
+function updatePagination() {
+  const totalPages = Math.ceil(filteredInventory.length / itemsPerPage);
+  const pagination = document.createElement('div');
+  pagination.className = 'pagination';
+  for (let i = 1; i <= totalPages; i++) {
+    const button = document.createElement('button');
+    button.textContent = i;
+    button.classList.toggle('active', i === currentPage);
+    button.onclick = () => {
+      currentPage = i;
+      updateInventoryTable();
+    };
+    pagination.appendChild(button);
+  }
+  const existingPagination = document.querySelector('.pagination');
+  if (existingPagination) {
+    existingPagination.replaceWith(pagination);
+  } else {
+    document.querySelector('.inventory-table').after(pagination);
+  }
+}
+function updatePaymentStatus(index) {
+  const pig = filteredInventory[index];
+  showModal('paymentModal', '');
+  document.getElementById('paymentModalContent').innerHTML = `
+    <h3>Actualizar Estado de Pago</h3>
+    <div class="form-group">
+      <label>Proveedor: ${pig.proveedor}</label>
+    </div>
+    <div class="form-group">
+      <label for="newPaymentStatus">Estado de Pago</label>
+      <select id="newPaymentStatus">
+        <option value="pagado" ${pig.pago === 'pagado' ? 'selected' : ''}>Pagado</option>
+        <option value="pendiente" ${pig.pago === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="paymentProof">Comprobante de Pago</label>
+      <input type="file" id="paymentProof" accept="image/*" multiple>
+    </div>
+    <div class="button-group">
+      <button onclick="closeModal('paymentModal')" class="secondary-button">Cancelar</button>
+      <button onclick="savePaymentUpdate(${index})" class="primary-button">Guardar Cambios</button>
+    </div>
+  `;
+}
+function savePaymentUpdate(index) {
+  const newStatus = document.getElementById('newPaymentStatus').value;
+  const newProof = document.getElementById('paymentProof').files;
+  if (newStatus === 'pagado' && newProof.length === 0) {
+    showNotification('Debe agregar un comprobante de pago', 'warning');
+    return;
+  }
+  inventory[index].pago = newStatus;
+  inventory[index].ultimaModificacion = new Date().toISOString();
+  if (newProof.length > 0) {
+    if (!inventory[index].comprobantes) {
+      inventory[index].comprobantes = [];
+    }
+    for (let i = 0; i < newProof.length; i++) {
+      inventory[index].comprobantes.push(newProof[i]);
+    }
+  }
+  closeModal('paymentModal');
+  updateInventoryTable();
+  showNotification('Estado de pago actualizado correctamente', 'success');
+}
+function viewComprobante(index) {
+  const pig = filteredInventory[index];
+  const allComprobantes = [];
+  if (pig.comprobante) {
+    allComprobantes.push(pig.comprobante);
+  }
+  if (pig.comprobantes && pig.comprobantes.length > 0) {
+    allComprobantes.push(...pig.comprobantes);
+  }
+  if (allComprobantes.length > 0) {
+    const modal = document.getElementById('comprobanteCarouselModal');
+    const carouselContainer = modal.querySelector('.carousel-images');
+    carouselContainer.innerHTML = '';
+    let currentIndex = 0;
+    const showImage = index => {
+      const translateX = -index * 100;
+      carouselContainer.querySelectorAll('img').forEach(img => {
+        img.style.transform = `translateX(${translateX}%)`;
+      });
+    };
+    allComprobantes.forEach((comprobante, idx) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        carouselContainer.appendChild(img);
+        if (idx === 0) showImage(0);
+      };
+      reader.readAsDataURL(comprobante);
+    });
+    modal.querySelector('.prev').onclick = () => {
+      currentIndex = Math.max(0, currentIndex - 1);
+      showImage(currentIndex);
+    };
+    modal.querySelector('.next').onclick = () => {
+      currentIndex = Math.min(allComprobantes.length - 1, currentIndex + 1);
+      showImage(currentIndex);
+    };
+    modal.querySelector('.modal-close-carousel').onclick = () => {
+      modal.classList.remove('active');
+    };
+    modal.classList.add('active');
+  }
+}
+</script>
+</body>
+</html>
